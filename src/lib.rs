@@ -48,13 +48,18 @@ impl<'a> Lotus<'a> {
     }
 
     pub fn format(&self, number: f64) -> String {
-        let value = format!("{:.*}", self.precision as usize, number);
 
-        let mut float_iter = value.split(".");
-        let integral   = float_iter.next().unwrap();
-        let fractional = float_iter.next().unwrap();
+        if number == 0. {
+            let value = format!("{:.*}", self.precision as usize, number);
+            let currencied = self.format_zero.replace("%v", value.as_str());
+            return currencied.replace("%s", self.symbol)
+        } else {
+            let value = format!("{:.*}", self.precision as usize, number.abs());
+            let mut float_iter = value.split(".");
+            let integral   = float_iter.next().unwrap();
+            let fractional = float_iter.next().unwrap();
 
-        let mut formatted_integral = String::new();
+            let mut formatted_integral = String::new();
 
         for ( i, letter ) in integral.chars().rev().enumerate() {
             if i % 3 == 0 && i != 0 && letter != '-' {
