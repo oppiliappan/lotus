@@ -2,10 +2,13 @@ use std::default::Default;
 use std::fmt::Display;
 use num::{ Float, zero };
 
+#[macro_use]
+extern crate derive_builder;
+
 #[cfg(test)]
 mod tests {
 
-    use crate::Lotus;
+    use super::*;
 
     #[test]
     fn it_formats_some_floats() {
@@ -29,7 +32,8 @@ mod tests {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Builder)]
+#[builder(default)]
 pub struct Lotus<'a> {
     symbol: &'a str,
     precision: u8,
