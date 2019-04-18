@@ -1,4 +1,6 @@
 use std::default::Default;
+use std::fmt::Display;
+use num::{ Float, zero };
 
 #[cfg(test)]
 mod tests {
@@ -8,7 +10,7 @@ mod tests {
     #[test]
     fn it_formats_some_floats() {
         let dollar = Lotus::new("$", 2);
-        assert_eq!("$ 5,000.00", dollar.format(5000.0));
+        assert_eq!("$ 200.00", dollar.format(200.));
     }
     #[test]
     fn it_formats_some_floats_with_some_extras() {
@@ -47,8 +49,8 @@ impl<'a> Lotus<'a> {
         }
     }
 
-    pub fn format(&self, number: f64) -> String {
-        if number == 0. {
+    pub fn format<T: Float + Display>(&self, number: T) -> String {
+        if number == zero() {
             let value = format!("{:.*}", self.precision as usize, number);
             let currencied = self.format_zero.replace("%v", value.as_str());
             return currencied.replace("%s", self.symbol)
