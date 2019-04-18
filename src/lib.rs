@@ -15,11 +15,21 @@ mod tests {
         let pound = Lotus::new("GBP", 4);
         assert_eq!("GBP 5,000.2500", pound.format(5000.25));
     }
+    #[test]
+    fn it_formats_negative_floats() {
+        let pound = Lotus::new("$", 3);
+        assert_eq!("$ (5,000.000)", pound.format(-5000.0));
+    }
+    #[test]
+    fn it_formats_a_zero_valued_float() {
+        let pound = Lotus::new("$", 2);
+        assert_eq!("$ --", pound.format(0.00));
+    }
 }
 
 #[derive(Debug)]
 pub struct Lotus<'a> {
-    symbol: String,
+    symbol: &'a str,
     precision: u8,
     thousand_str: &'a str,
     decimal_str: &'a str,
@@ -31,7 +41,7 @@ pub struct Lotus<'a> {
 impl<'a> Lotus<'a> {
     pub fn new(symbol: &str, precision: u8) -> Lotus {
         Lotus {
-            symbol: symbol.to_string(),
+            symbol,
             precision,
             ..Default::default()
         }
