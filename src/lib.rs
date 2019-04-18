@@ -30,6 +30,31 @@ mod tests {
         let dollar = Lotus::new("Rs. ", 2);
         assert_eq!("Rs.  --", dollar.format(0.00));
     }
+    #[test]
+    fn it_tests_if_builders_are_working_fine() {
+        let rupee = LotusBuilder::default()
+            .symbol("Rs.")
+            .precision(1)
+            .format("%s %v")
+            .format_negative("%s (%v)")
+            .format_zero("%s 0.00")
+            .decimal_str(".")
+            .thousand_str(" ")
+            .build()
+            .unwrap();
+        assert_eq!("Rs. (2 000.0)", rupee.format(-2000.));
+        assert_eq!("Rs. 0.00", rupee.format(0.));
+        assert_eq!("Rs. 2 000 000.0", rupee.format(2_000_000.0));
+    }
+    #[test]
+    fn lets_see_if_defaults_are_working() {
+        let default_dollar = LotusBuilder::default()
+            .format_zero("%s 0")
+            .build()
+            .unwrap();
+        assert_eq!("$ 123.00", default_dollar.format(123.0));
+        assert_eq!("$ 0", default_dollar.format(0.0));
+    }
 }
 
 #[derive(Debug, Builder)]
