@@ -5,3 +5,5 @@ authors = ["NerdyPepper <akshayoppiliappan@gmail.com>"]
 edition = "2018"
 
 [dependencies]
+derive_builder = "0.7.1"
+num = "0.2.0"
