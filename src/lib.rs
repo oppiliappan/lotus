@@ -60,18 +60,26 @@ impl<'a> Lotus<'a> {
 
             let mut formatted_integral = String::new();
 
-        for ( i, letter ) in integral.chars().rev().enumerate() {
-            if i % 3 == 0 && i != 0 && letter != '-' {
-                formatted_integral.push_str(&self.thousand_str[..]);
+            for ( i, letter ) in integral.chars().rev().enumerate() {
+                if i % 3 == 0 && i != 0 && letter != '-' {
+                    formatted_integral.push_str(&self.thousand_str[..]);
+                }
+                formatted_integral.push(letter);
             }
-            formatted_integral.push(letter);
-        }
-        let formatted_integral = formatted_integral.chars().rev().collect::<String>();
-        let formatted_float = format!("{}{}{}", formatted_integral, self.decimal_str, fractional);
 
-        let mut currencied = self.format.replace("%s", &self.symbol[..]);
-        currencied = currencied.replace("%v", &formatted_float[..]);
-        currencied
+            let formatted_integral = formatted_integral.chars().rev().collect::<String>();
+            let formatted_float = format!("{}{}{}", formatted_integral, self.decimal_str, fractional);
+
+            let mut currencied = String::new();
+            if number.is_sign_negative() {
+                currencied.push_str(self.format_negative);
+            } else {
+                currencied.push_str(self.format);
+            }
+            currencied = currencied.replace("%v", formatted_float.as_str());
+            currencied = currencied.replace("%s", &self.symbol[..]);
+            return currencied;
+        }
     }
 }
 
