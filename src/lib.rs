@@ -1,6 +1,5 @@
 use std::default::Default;
 use std::fmt::Display;
-use num::{ Float, zero };
 
 #[macro_use]
 extern crate derive_builder;
@@ -13,12 +12,12 @@ mod tests {
     #[test]
     fn it_formats_some_floats() {
         let dollar = Lotus::new("$", 2);
-        assert_eq!("$ 200.00", dollar.format(200.));
+        assert_eq!("$ 200.00", dollar.format(200));
     }
     #[test]
     fn it_formats_some_floats_with_some_extras() {
         let pound = Lotus::new("GBP", 1);
-        assert_eq!("GBP 5,000.4", pound.format(5000.35));
+        assert_eq!("GBP 5,000.4", pound.format(5000.35f32));
     }
     #[test]
     fn it_formats_negative_floats() {
@@ -50,10 +49,17 @@ mod tests {
     fn lets_see_if_defaults_are_working() {
         let default_dollar = LotusBuilder::default()
             .format_zero("%s 0")
+            .format_negative("%s neg %v")
             .build()
             .unwrap();
         assert_eq!("$ 123.00", default_dollar.format(123.0));
+        assert_eq!("$ neg 123.00", default_dollar.format(-123.0));
         assert_eq!("$ 0", default_dollar.format(0.0));
+    }
+    #[test]
+    fn macro_tests() {
+        assert_eq!("$ 200.00", lotus!(200.0, "$"));
+        assert_eq!("Rs. 200.00", lotus!(200, "Rs."));
     }
 }
 
@@ -78,8 +84,9 @@ impl<'a> Lotus<'a> {
         }
     }
 
-    pub fn format<T: Float + Display>(&self, number: T) -> String {
-        if number == zero() {
+    pub fn format<T: Into<f64> + Display>(&self, in_number: T) -> String {
+        let number: f64 = in_number.into();
+        if number == 0. {
             let value = format!("{:.*}", self.precision as usize, number);
             let currencied = self.format_zero.replace("%v", value.as_str());
             return currencied.replace("%s", self.symbol)
@@ -110,6 +117,19 @@ impl<'a> Lotus<'a> {
             currencied = currencied.replace("%v", formatted_float.as_str());
             currencied = currencied.replace("%s", &self.symbol[..]);
             return currencied;
+        }
+    }
+}
+
+#[macro_export]
+macro_rules! lotus {
+    ($x:expr, $y:expr) => {
+        {
+            let quick = LotusBuilder::default()
+                .symbol($y)
+                .build()
+                .unwrap();
+            quick.format($x)
         }
     }
 }
