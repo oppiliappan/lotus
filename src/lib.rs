@@ -61,6 +61,10 @@ mod tests {
         assert_eq!("$ 200.00", lotus!(200.0, "$"));
         assert_eq!("Rs. 200.00", lotus!(200, "Rs."));
     }
+    #[test]
+    fn macro_tests_arm_2() {
+        assert_eq!("2,000,000.00", lotus!(2_000_000.0));
+    }
 }
 
 #[derive(Debug, Builder)]
@@ -131,13 +135,22 @@ macro_rules! lotus {
                 .unwrap();
             quick.format($x)
         }
+    };
+    ($x: expr) => {
+        {
+            let quick = LotusBuilder::default()
+                .format("%v")
+                .build()
+                .unwrap();
+            quick.format($x)
+        }
     }
 }
 
 impl<'a> Default for Lotus<'a> {
     fn default() -> Self {
         Lotus {
-            symbol: "$".into(),
+            symbol: "$",
             precision: 2,
             thousand_str: ",",
             decimal_str: ".",
