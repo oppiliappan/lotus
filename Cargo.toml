@@ -9,6 +9,7 @@ repository = "https://github.com/nerdypepper/lotus"
 readme = "readme.md"
 keywords = ["money", "formatting", "currency"]
 categories = ["value-formatting", "command-line-interface"]
+license = "MIT"
 
 [dependencies]
 derive_builder = "0.7.1"
