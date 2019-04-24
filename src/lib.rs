@@ -1,6 +1,6 @@
 //! # Lotus
 //! `Lotus` is a simple library to provide formatting for currency and numbers.  
-//! It makes pretty printing of monetary values convinient
+//! It makes pretty printing of monetary values convenient.
 //!
 //! # Usage
 //! ```

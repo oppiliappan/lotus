@@ -4,12 +4,24 @@ Basic currency and number formatting library.
 
 # Installation
 
+1. Add the following lines to your `Cargo.toml`
+```toml
+[dependencies]
+Lotus = "0.1.1" 
+```
+2. Use it in your crate:
+```rust
+extern crate Lotus;
+use Lotus::*;
+```
+
 # Usage
 Here are some examples which illustrate the library functionality. Please
-read the [documentation]() as well
+read the [documentation](https://docs.rs/Lotus/0.1.1/Lotus/index.html) as well.
 ```
-#[macro_use]
-use crate::Lotus::*;
+extern crate Lotus;
+use Lotus::*;
+
 // Builder format (recommended)
 let rupee = LotusBuilder::default()
     .symbol("Rs.")
