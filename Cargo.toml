@@ -1,8 +1,14 @@
 [package]
 name = "Lotus"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["NerdyPepper <akshayoppiliappan@gmail.com>"]
 edition = "2018"
+
+description = "Currency and Number formatting library"
+repository = "https://github.com/nerdypepper/lotus"
+readme = "readme.md"
+keywords = ["money", "formatting", "currency"]
+categories = ["value-formatting", "command-line-interface"]
 
 [dependencies]
 derive_builder = "0.7.1"
