@@ -18,7 +18,7 @@ use Lotus::*;
 # Usage
 Here are some examples which illustrate the library functionality. Please
 read the [documentation](https://docs.rs/Lotus/0.1.1/Lotus/index.html) as well.
-```
+```rust
 extern crate Lotus;
 use Lotus::*;
 
