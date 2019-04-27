@@ -10,9 +10,9 @@
 //! let rupee = LotusBuilder::default()
 //!     .symbol("Rs.")
 //!     .precision(1)
-//!     .format_positive("%s %v")
-//!     .format_negative("%s (%v)")
-//!     .format_zero("%s 0.00")
+//!     .format_positive("{symbol} {value}")
+//!     .format_negative("{symbol} ({value})")
+//!     .format_zero("{symbol} 0.00")
 //!     .decimal_str(".")
 //!     .thousand_str(" ")
 //!     .build()
@@ -34,7 +34,6 @@
 //! ```
 
 use std::default::Default;
-use std::fmt::Display;
 
 #[macro_use]
 extern crate derive_builder;
@@ -83,21 +82,21 @@ impl<'a> Lotus<'a> {
     /// let rupee = LotusBuilder::default()
     ///     .symbol("Rs.")
     ///     .precision(4)
-    ///     .format_positive("%s %v")
-    ///     .format_negative("%s (%v)")
-    ///     .format_zero("%s 0.00")
+    ///     .format_positive("{symbol} {value}")
+    ///     .format_negative("{symbol} ({value})")
+    ///     .format_zero("{symbol} 0.00")
     ///     .decimal_str(".")
     ///     .thousand_str(" ")
     ///     .build()
     ///     .unwrap();
     /// assert_eq!("Rs. 2 000 000.0000", rupee.format(2_000_000));
     /// ```
-    pub fn format<T: Into<f64> + Display>(&self, in_number: T) -> String {
+    pub fn format<T: Into<f64>>(&self, in_number: T) -> String {
         let number: f64 = in_number.into();
         if number == 0. {
             let value = format!("{:.*}", self.precision as usize, number);
-            let currencied = self.format_zero.replace("%v", value.as_str());
-            return currencied.replace("%s", self.symbol)
+            let currencied = self.format_zero.replace("{value}", value.as_str());
+            return currencied.replace("{symbol}", self.symbol)
         } else {
             let value = format!("{:.*}", self.precision as usize, number.abs());
             let mut float_iter = value.split(".");
@@ -122,8 +121,8 @@ impl<'a> Lotus<'a> {
             } else {
                 currencied.push_str(self.format_positive);
             }
-            currencied = currencied.replace("%v", formatted_float.as_str());
-            currencied = currencied.replace("%s", &self.symbol[..]);
+            currencied = currencied.replace("{value}", formatted_float.as_str());
+            currencied = currencied.replace("{symbol}", &self.symbol[..]);
             return currencied;
         }
     }
@@ -136,9 +135,9 @@ impl<'a> Default for Lotus<'a> {
             precision: 2,
             thousand_str: ",",
             decimal_str: ".",
-            format_positive: "%s %v",
-            format_negative: "%s (%v)",
-            format_zero: "%s --",
+            format_positive: "{symbol} {value}",
+            format_negative: "{symbol} ({value})",
+            format_zero: "{symbol} --",
         }
     }
 }
