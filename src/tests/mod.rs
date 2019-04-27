@@ -31,9 +31,9 @@ mod tests {
         let rupee = LotusBuilder::default()
             .symbol("Rs.")
             .precision(1)
-            .format_positive("%s %v")
-            .format_negative("%s (%v)")
-            .format_zero("%s 0.00")
+            .format_positive("{symbol} {value}")
+            .format_negative("{symbol} ({value})")
+            .format_zero("{symbol} 0.00")
             .decimal_str(".")
             .thousand_str(" ")
             .build()
@@ -46,8 +46,8 @@ mod tests {
     #[test]
     fn lets_see_if_defaults_are_working() {
         let default_dollar = LotusBuilder::default()
-            .format_zero("%s 0")
-            .format_negative("%s neg %v")
+            .format_zero("{symbol} 0")
+            .format_negative("{symbol} neg {value}")
             .build()
             .unwrap();
         assert_eq!("$ 123.00", default_dollar.format(123.0));

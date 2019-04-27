@@ -31,7 +31,7 @@ mod macros {
         ($x: expr) => {
             {
                 let quick = LotusBuilder::default()
-                    .format_positive("%v")
+                    .format_positive("{value}")
                     .build()
                     .unwrap();
                 quick.format($x)
